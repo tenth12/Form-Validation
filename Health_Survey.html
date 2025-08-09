@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>แบบสอบถามสุขภาพ</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-8">
+
+    <div class="container mx-auto bg-white p-6 rounded shadow-md">
+        <h1 class="text-2xl font-bold mb-4">แบบสอบถามสุขภาพ</h1>
+
+        <form id="healthForm" novalidate>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="age">อายุ (ปี)</label>
+                <input type="number" id="age" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <span id="ageError" class="text-red-500 text-xs italic"></span>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">เพศ:</label>
+                <div class="flex items-center">
+                    <input type="radio" name="gender" value="ชาย" class="mr-2">
+                    <label class="text-gray-700 text-sm mr-4">ชาย</label>
+                    <input type="radio" name="gender" value="หญิง" class="mr-2">
+                    <label class="text-gray-700 text-sm mr-4">หญิง</label>
+                </div>
+                <span id="genderError" class="text-red-500 text-xs italic"></span>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="weight">น้ำหนัก (กก.)</label>
+                <input type="number" id="weight" step="0.1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <span id="weightError" class="text-red-500 text-xs italic"></span>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="height">ส่วนสูง (ซม.)</label>
+                <input type="number" id="height" step="0.1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <span id="heightError" class="text-red-500 text-xs italic"></span>
+            </div>
+
+            <div class="mb-4">
+                <div class="flex items-center">
+                    <input type="checkbox" id="diseaseCheck" class="mr-2">
+                    <label class="text-gray-700 text-sm font-bold" for="diseaseCheck">มีโรคประจำตัว</label>
+                </div>
+                <textarea id="diseaseDetail" placeholder="กรอกโรคประจำตัว..." class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" style="display:none;"></textarea>
+                <span id="diseaseError" class="text-red-500 text-xs italic"></span>
+            </div>
+
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">ส่งข้อมูล</button>
+        </form>
+
+        <div id="resultModal" class="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex items-center justify-center" style="display:none;">
+            <div class="bg-white p-6 rounded shadow-md max-w-sm">
+                <h2 class="text-lg font-bold mb-2">ผลการคำนวณ BMI</h2>
+                <p id="bmiResult"></p>
+                <button id="closeModal" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4">ปิด</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('healthForm');
+        const diseaseCheck = document.getElementById('diseaseCheck');
+        const diseaseDetail = document.getElementById('diseaseDetail');
+        const modal = document.getElementById('resultModal');
+        const closeModal = document.getElementById('closeModal');
+        const bmiResult = document.getElementById('bmiResult');
+
+        diseaseCheck.addEventListener('change', () => {
+            diseaseDetail.style.display = diseaseCheck.checked ? 'block' : 'none';
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let valid = true;
+
+            document.getElementById('ageError').textContent = '';
+            document.getElementById('genderError').textContent = '';
+            document.getElementById('weightError').textContent = '';
+            document.getElementById('heightError').textContent = '';
+            document.getElementById('diseaseError').textContent = '';
+
+            const age = parseInt(document.getElementById('age').value.trim());
+            const gender = document.querySelector('input[name="gender"]:checked');
+            const weight = parseFloat(document.getElementById('weight').value.trim());
+            const height = parseFloat(document.getElementById('height').value.trim());
+            const diseaseInfo = diseaseDetail.value.trim();
+
+            if (isNaN(age) || age < 15 || age > 60) {
+                document.getElementById('ageError').textContent = 'กรุณากรอกอายุระหว่าง 15-60 ปี';
+                valid = false;
+            }
+
+            if (!gender) {
+                document.getElementById('genderError').textContent = 'กรุณาเลือกเพศ';
+                valid = false;
+            }
+
+            if (isNaN(weight) || weight <= 0) {
+                document.getElementById('weightError').textContent = 'กรุณากรอกน้ำหนักที่เป็นค่าบวก';
+                valid = false;
+            }
+
+            if (isNaN(height) || height <= 0) {
+                document.getElementById('heightError').textContent = 'กรุณากรอกส่วนสูงที่เป็นค่าบวก';
+                valid = false;
+            }
+
+            if (diseaseCheck.checked && diseaseInfo === '') {
+                document.getElementById('diseaseError').textContent = 'กรุณากรอกรายละเอียดโรคประจำตัว';
+                valid = false;
+            }
+
+            if (!valid) return;
+
+            const bmi = weight / ((height / 100) ** 2);
+            let category = '';
+            if (bmi < 18.5) category = 'น้ำหนักน้อย';
+            else if (bmi < 24.9) category = 'ปกติ';
+            else if (bmi < 29.9) category = 'น้ำหนักเกิน';
+            else category = 'อ้วน';
+
+            bmiResult.textContent = `BMI ของคุณ: ${bmi.toFixed(2)} (${category})`;
+            modal.style.display = 'flex';
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+
+</body>
+</html>

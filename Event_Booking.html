@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Booking</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            text-align: center;
+        }
+
+        .error {
+            color: red;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+
+    <form id="bookingForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" action="" method="post" novalidate>
+        <div id="errorMsg" class="error"></div>
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-800 text-center">ฟอร์มจองตั๋วกิจกรรม</h1>
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="name">ชื่อ-นามสกุล:</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                   type="text" id="name" name="name" pattern=".{2,}" placeholder="ชื่อ-นามสกุล" required>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="phone_th">เบอร์โทรศัพท์:</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                   type="tel" id="phone_th" name="phone_th" pattern="^(0)\d{9}" placeholder="เบอร์โทรศัพท์" required>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="ticket_type">ประเภทตั๋ว:</label>
+            <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="ticket_type" name="ticket_type" required>
+                <option value="">เลือกประเภทตั๋ว</option>
+                <option value="normal">ปกติ</option>
+                <option value="vip">VIP</option>
+                <option value="premium">Premium</option>
+            </select>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="quantity">จำนวนตั๋ว:</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                   type="number" id="quantity" name="quantity" min="1" max="5" placeholder="จำนวนตั๋ว" required>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="submit">
+                ยืนยัน
+            </button>
+            <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="reset">
+                ล้างข้อมูล
+            </button>
+        </div>
+    </form>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content" id="modalText"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('bookingForm');
+        const errorMsg = document.getElementById('errorMsg');
+        const modal = document.getElementById('successModal');
+        const modalText = document.getElementById('modalText');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            errorMsg.textContent = '';
+
+            const name = form.name.value.trim();
+            const phone = form.phone_th.value.trim();
+            const ticketType = form.ticket_type.value;
+            const quantity = Number(form.quantity.value);
+
+            // Validation
+            if (name.length < 2) {
+                errorMsg.textContent = 'กรุณากรอกชื่อ-นามสกุลอย่างน้อย 2 ตัวอักษร';
+                return;
+            }
+            if (!/^0\d{9}$/.test(phone)) {
+                errorMsg.textContent = 'กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง (10 หลัก)';
+                return;
+            }
+            if (!ticketType) {
+                errorMsg.textContent = 'กรุณาเลือกประเภทตั๋ว';
+                return;
+            }
+            if (quantity < 1 || quantity > 5) {
+                errorMsg.textContent = 'จำนวนตั๋วต้องอยู่ระหว่าง 1 ถึง 5';
+                return;
+            }
+            if ((ticketType === 'vip' || ticketType === 'premium') && quantity > 2) {
+                errorMsg.textContent = 'VIP หรือ Premium สามารถจองได้ไม่เกิน 2 ใบ';
+                return;
+            }
+
+            modalText.textContent = `จองตั๋วสำเร็จ จำนวน: ${quantity} ประเภท: ${ticketType}`;
+            modal.style.display = 'block';
+        });
+
+        modal.onclick = function () {
+            modal.style.display = 'none';
+            form.reset();
+        }
+    </script>
+</body>
+</html>

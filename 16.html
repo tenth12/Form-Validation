@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>มจท.16 - คำร้องขอโอนย้ายสาขา</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-100 p-8">
+
+<div class="max-w-lg mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+  <h1 class="text-2xl font-bold mb-6">แบบฟอร์ม มจท.16</h1>
+  <form id="transferForm" novalidate>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="day">วันที่:</label>
+      <input type="date" id="day" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" />
+      <span id="dayError" class="text-red-500 text-xs italic"></span>
+    </div>
+
+    <div class="mb-4">
+      <label for="newFaculty" class="block text-gray-700 text-sm font-bold mb-2">คณบดีคณะ (คณะใหม่):</label>
+      <input type="text" id="newFaculty" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" />
+      <span id="newFacultyError" class="text-red-500 text-xs italic"></span>
+    </div>
+
+    <div class="mb-4">
+      <label for="prefix" class="block text-gray-700 text-sm font-bold mb-2">คำนำหน้า:</label>
+      <select id="prefix" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline">
+        <option value="">--เลือก--</option>
+        <option>นาย</option>
+        <option>นาง</option>
+        <option>นางสาว</option>
+      </select>
+      <span id="prefixError" class="text-red-500 text-xs italic"></span>
+    </div>
+
+    <div class="mb-4">
+      <label for="fullname" class="block text-gray-700 text-sm font-bold mb-2">ชื่อ-นามสกุล:</label>
+      <input type="text" id="fullname" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" />
+      <span id="fullnameError" class="text-red-500 text-xs italic"></span>
+    </div>
+
+    <div class="mb-4">
+      <label for="studentId" class="block text-gray-700 text-sm font-bold mb-2">รหัสนักศึกษา:</label>
+      <input type="text" id="studentId" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" />
+      <span id="studentIdError" class="text-red-500 text-xs italic"></span>
+    </div>
+
+    <div class="mb-4">
+      <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">โทรศัพท์มือถือ:</label>
+      <input type="tel" id="phone" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" />
+      <span id="phoneError" class="text-red-500 text-xs italic"></span>
+    </div>
+
+    <div class="mb-4">
+      <label for="program" class="block text-gray-700 text-sm font-bold mb-2">หลักสูตร:</label>
+      <select id="program" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline">
+        <option value="">--เลือก--</option>
+        <option>4 – 5 ปี</option>
+        <option>4 ปีเทียบเข้า (2 ปี)</option>
+      </select>
+      <span id="programError" class="text-red-500 text-xs italic"></span>
+    </div>
+
+    <div class="mb-4">
+      <label for="semesterType" class="block text-gray-700 text-sm font-bold mb-2">ภาค:</label>
+      <select id="semesterType" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline">
+        <option value="">--เลือก--</option>
+        <option>ปกติ</option>
+        <option>สมทบ</option>
+      </select>
+      <span id="semesterTypeError" class="text-red-500 text-xs italic"></span>
+    </div>
+
+    <div class="mb-4">
+      <label for="oldMajor" class="block text-gray-700 text-sm font-bold mb-2">สาขาวิชาเดิม:</label>
+      <input type="text" id="oldMajor" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" />
+      <span id="oldMajorError" class="text-red-500 text-xs italic"></span>
+    </div>
+
+    <div class="mb-4">
+      <label for="oldFaculty" class="block text-gray-700 text-sm font-bold mb-2">คณะเดิม:</label>
+      <input type="text" id="oldFaculty" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" />
+      <span id="oldFacultyError" class="text-red-500 text-xs italic"></span>
+    </div>
+
+    <div class="mb-4">
+      <label for="newMajor" class="block text-gray-700 text-sm font-bold mb-2">สาขาที่ขอโอนย้ายไป:</label>
+      <input type="text" id="newMajor" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" />
+      <span id="newMajorError" class="text-red-500 text-xs italic"></span>
+    </div>
+
+    <div class="mb-6">
+      <label for="reason" class="block text-gray-700 text-sm font-bold mb-2">เหตุผล:</label>
+      <textarea id="reason" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"></textarea>
+      <span id="reasonError" class="text-red-500 text-xs italic"></span>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        ส่งคำร้อง
+      </button>
+    </div>
+  </form>
+</div>
+
+<div id="resultBox" class="max-w-lg mx-auto bg-green-100 text-green-900 p-4 mt-4 rounded shadow hidden"></div>
+
+<script>
+  document.getElementById('transferForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // เคลียร์ข้อความ error ทั้งหมดก่อน
+    document.querySelectorAll('span[id$="Error"]').forEach(el => el.textContent = '');
+
+    let valid = true;
+
+    const fields = [
+      {id: 'day', name: 'วันที่', type: 'date'},
+      {id: 'newFaculty', name: 'คณบดีคณะ (คณะใหม่)'},
+      {id: 'prefix', name: 'คำนำหน้า'},
+      {id: 'fullname', name: 'ชื่อ-นามสกุล'},
+      {id: 'studentId', name: 'รหัสนักศึกษา', pattern: /^[0-9]{10}$/, patternMessage: 'รหัสนักศึกษาต้องเป็นตัวเลข 10 หลัก'},
+      {id: 'phone', name: 'โทรศัพท์มือถือ', pattern: /^0[0-9]{9}$/, patternMessage: 'เบอร์โทรต้องขึ้นต้นด้วย 0 และมี 10 หลัก'},
+      {id: 'program', name: 'หลักสูตร'},
+      {id: 'semesterType', name: 'ภาค'},
+      {id: 'oldMajor', name: 'สาขาวิชาเดิม'},
+      {id: 'oldFaculty', name: 'คณะเดิม'},
+      {id: 'newMajor', name: 'สาขาที่ขอโอนย้ายไป'},
+      {id: 'reason', name: 'เหตุผล'}
+    ];
+
+    fields.forEach(f => {
+      const el = document.getElementById(f.id);
+      const errorEl = document.getElementById(f.id + 'Error');
+      const val = el.value.trim();
+
+      if (!val) {
+        errorEl.textContent = `กรุณากรอก${f.name}`;
+        valid = false;
+      } else if (f.pattern && !f.pattern.test(val)) {
+        errorEl.textContent = f.patternMessage;
+        valid = false;
+      }
+    });
+
+    if (valid) {
+      const resultBox = document.getElementById('resultBox');
+      resultBox.textContent = `
+วันที่: ${document.getElementById('day').value}
+คณะใหม่: ${document.getElementById('newFaculty').value}
+คำนำหน้า: ${document.getElementById('prefix').value}
+ชื่อ-นามสกุล: ${document.getElementById('fullname').value}
+รหัสนักศึกษา: ${document.getElementById('studentId').value}
+โทรศัพท์: ${document.getElementById('phone').value}
+หลักสูตร: ${document.getElementById('program').value}
+ภาค: ${document.getElementById('semesterType').value}
+สาขาเดิม: ${document.getElementById('oldMajor').value}
+คณะเดิม: ${document.getElementById('oldFaculty').value}
+สาขาใหม่: ${document.getElementById('newMajor').value}
+เหตุผล: ${document.getElementById('reason').value}
+      `.trim();
+      resultBox.classList.remove('hidden');
+    } else {
+      document.getElementById('resultBox').classList.add('hidden');
+    }
+  });
+</script>
+
+</body>
+</html>
